@@ -16,6 +16,7 @@ import { ProductsModule } from './products/products.module';
 import { QuotesModule } from './quotes/quotes.module';
 import { AdminModule } from './admin/admin.module';
 import { UsersModule } from './users/users.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UsersModule } from './users/users.module';
     OrdersModule,
     QuotesModule,
     AdminModule,
+    SeedModule,
   ],
   providers: [
     {
@@ -58,6 +60,7 @@ import { UsersModule } from './users/users.module';
       provide: APP_INTERCEPTOR,
       useClass: ResponseTransformInterceptor,
     },
+
   ],
 })
 export class AppModule {}

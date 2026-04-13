@@ -103,16 +103,27 @@ export class ProductsService {
   }
 
   async getInventoryView() {
-    const products = await this.productsRepository.findAll();
-    return products.map((product) => ({
+  const products = await this.productsRepository.findAll();
+
+  return products
+    .filter((product) => product.isActive)
+    .map((product) => ({
       id: product.id,
-      name: product.name,
+      name_en: product.name_en,
+      name_es: product.name_es,
       stockQuantity: product.stockQuantity,
       isActive: product.isActive,
       category: product.category,
       updatedAt: product.updatedAt,
+      price: product.price,
+      description_en: product.description_en,
+      description_es: product.description_es,
+      size: product.size,
+      color: product.color,
+      imageUrls: product.imageUrls,
+      createdAt: product.createdAt,
     }));
-  }
+}
 
   async countProducts(): Promise<number> {
     return this.productsRepository.countAll();
@@ -131,8 +142,10 @@ export class ProductsService {
   private toResponse(product: Product) {
     return {
       id: product.id,
-      name: product.name,
-      description: product.description,
+      name_en: product.name_en,
+      name_es: product.name_es,
+      description_en: product.description_en,
+      description_es: product.description_es,
       price: product.price,
       stockQuantity: product.stockQuantity,
       stockStatus: product.stockQuantity > 0 ? 'IN_STOCK' : 'OUT_OF_STOCK',

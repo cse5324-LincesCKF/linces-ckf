@@ -123,7 +123,8 @@ export class CartService {
         quantity: item.quantity,
         product: {
           id: item.product.id,
-          name: item.product.name,
+          name_en: item.product.name_en,
+          name_es: item.product.name_es,
           price: item.product.price,
           imageUrls: item.product.imageUrls,
           stockQuantity: item.product.stockQuantity,

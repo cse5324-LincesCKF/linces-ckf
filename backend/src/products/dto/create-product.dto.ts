@@ -16,11 +16,20 @@ export class CreateProductDto {
   @ApiProperty()
   @IsString()
   @MaxLength(160)
-  name!: string;
+  name_en!: string;
 
   @ApiProperty()
   @IsString()
-  description!: string;
+  @MaxLength(160)
+  name_es!: string;
+
+  @ApiProperty()
+  @IsString()
+  description_en!: string;
+
+  @ApiProperty()
+  @IsString()
+  description_es!: string;
 
   @ApiProperty()
   @Type(() => Number)

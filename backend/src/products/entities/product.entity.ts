@@ -16,10 +16,16 @@ export class Product {
   id!: string;
 
   @Column({ length: 160 })
-  name!: string;
+  name_en!: string;
+
+  @Column({ length: 160 })
+  name_es!: string;
 
   @Column({ type: 'text' })
-  description!: string;
+  description_en!: string;
+
+  @Column({ type: 'text' })
+  description_es!: string;
 
   @Column({
     type: 'decimal',

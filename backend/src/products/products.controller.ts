@@ -39,6 +39,15 @@ export class ProductsController {
     return this.productsService.getProducts(query);
   }
 
+  @Get('inventory')
+  @Roles(UserRole.ADMINISTRATOR, UserRole.BRAND_RETAILER)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Return inventory view for product management' })
+  @ApiResponse({ status: 200, description: 'Inventory returned successfully' })
+  getInventoryView() {
+    return this.productsService.getInventoryView();
+  }
+
   @Public()
   @Get(':id')
   @ApiOperation({ summary: 'Return product details by id' })
@@ -49,7 +58,7 @@ export class ProductsController {
   }
 
   @Post()
-  @Roles(UserRole.ADMINISTRATOR)
+  @Roles(UserRole.ADMINISTRATOR, UserRole.BRAND_RETAILER)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a product record' })
   @ApiBody({ type: CreateProductDto })
@@ -62,7 +71,7 @@ export class ProductsController {
   }
 
   @Put(':id')
-  @Roles(UserRole.ADMINISTRATOR)
+  @Roles(UserRole.ADMINISTRATOR, UserRole.BRAND_RETAILER)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a product record' })
   @ApiBody({ type: UpdateProductDto })
@@ -76,7 +85,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  @Roles(UserRole.ADMINISTRATOR)
+  @Roles(UserRole.ADMINISTRATOR, UserRole.BRAND_RETAILER)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Soft delete a product record' })
   @ApiResponse({ status: 200, description: 'Product deleted successfully' })
@@ -88,7 +97,7 @@ export class ProductsController {
   }
 
   @Patch(':id/inventory')
-  @Roles(UserRole.ADMINISTRATOR)
+  @Roles(UserRole.ADMINISTRATOR, UserRole.BRAND_RETAILER)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update product inventory' })
   @ApiBody({ type: UpdateInventoryDto })

@@ -150,7 +150,7 @@ export class OrdersService {
     items.forEach((item) => {
       if (!item.product.isActive || item.product.stockQuantity < item.quantity) {
         throw new BadRequestException(
-          `Product ${item.product.name} is out of stock for the requested quantity`,
+          `Product ${item.product.name_en} / ${item.product.name_es} is out of stock for the requested quantity`,
         );
       }
     });
@@ -198,7 +198,8 @@ export class OrdersService {
         priceAtPurchase: item.priceAtPurchase,
         product: {
           id: item.product.id,
-          name: item.product.name,
+          name_en: item.product.name_en,
+          name_es: item.product.name_es,
           imageUrls: item.product.imageUrls,
         },
       })),

@@ -21,8 +21,10 @@ export function buildTypeOrmOptions(): TypeOrmModuleOptions {
     database: process.env.DB_NAME ?? 'lincesckf',
     entities: [join(__dirname, '..', '**', '*.entity.{ts,js}')],
     migrations: [join(__dirname, '..', '..', 'migrations', '*.{ts,js}')],
-    synchronize: false,
-    logging: !isProduction,
+//     synchronize: false,
+//     logging: !isProduction,
+    synchronize: true,  // 改为 true
+    logging: true,      // 改为 true (不管是不是生产环境都打印日志)
     migrationsRun: false,
   };
 }

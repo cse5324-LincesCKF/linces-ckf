@@ -44,7 +44,7 @@ export class ProductsRepository implements IProductsRepository {
 
     if (query.search) {
       builder.andWhere(
-        '(LOWER(product.name) LIKE LOWER(:search) OR LOWER(product.description) LIKE LOWER(:search))',
+        '(LOWER(product.name_en) LIKE LOWER(:search) OR LOWER(product.name_es) LIKE LOWER(:search) OR LOWER(product.description_en) LIKE LOWER(:search))',
         { search: `%${query.search}%` },
       );
     }
