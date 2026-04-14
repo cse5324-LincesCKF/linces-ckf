@@ -82,12 +82,14 @@ describe('ProductsService', () => {
     productsRepository.save.mockResolvedValue(product);
 
     const result = await service.createProduct('admin-1', {
-      name: 'Silk Dress',
-      description: 'Premium silk',
-      price: 100,
-      stockQuantity: 5,
-      category: 'Dresses',
-      imageUrls: ['https://example.com/image.jpg'],
+        name_en: 'Silk Dress',
+        name_es: 'Vestido de Seda',
+        description_en: 'Elegant silk dress',
+        description_es: 'Vestido elegante de seda',
+        price: 100,
+        stockQuantity: 10,
+        category: 'Dress',
+        imageUrls: [],
     });
 
     expect(result.id).toBe('product-1');
