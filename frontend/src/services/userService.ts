@@ -21,9 +21,15 @@ export interface UpdatePasswordDto {
   newPassword: string;
 }
 
-const unwrapResponse = <T>(data: any, fallback: T): T => {
-  if (data?.data !== undefined) return data.data as T;
-  if (data !== undefined) return data as T;
+const unwrapResponse = <T>(data: unknown, fallback: T): T => {
+  if (typeof data === 'object' && data !== null && 'data' in data) {
+    return (data as { data: T }).data;
+  }
+
+  if (data !== undefined) {
+    return data as T;
+  }
+
   return fallback;
 };
 
