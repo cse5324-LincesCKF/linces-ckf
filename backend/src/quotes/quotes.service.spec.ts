@@ -34,7 +34,9 @@ describe('QuotesService', () => {
 
   beforeEach(async () => {
     jest.clearAllMocks();
-    dataSource.transaction.mockImplementation((callback: Function) => callback({}));
+    dataSource.transaction.mockImplementation(
+        (callback: (manager: any) => unknown) => callback({})
+    );
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         QuotesService,
