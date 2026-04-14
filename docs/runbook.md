@@ -19,7 +19,7 @@
 ### Prerequisites
 | Tool | Version |
 |------|---------|
-| Node.js | 20.x LTS |
+| Node.js | 22.x LTS |
 | npm | 10.x+ |
 | Docker Desktop | 24.x+ |
 | Git | 2.x+ |
@@ -100,8 +100,8 @@ npm run dev
 
 | Service | Dockerfile | Base image |
 |---------|-----------|-----------|
-| backend | `backend/Dockerfile` | `node:20-alpine` |
-| frontend | `frontend/Dockerfile` | `node:20-alpine` → `nginx:1.25-alpine` |
+| backend | `backend/Dockerfile` | `node:22-alpine` |
+| frontend | `frontend/Dockerfile` | `node:22-alpine` → `nginx:1.25-alpine` |
 | db | Docker Hub official | `postgres:16-alpine` |
 
 ### Common commands

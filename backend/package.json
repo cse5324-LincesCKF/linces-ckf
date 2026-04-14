@@ -4,6 +4,9 @@
   "private": true,
   "description": "Backend REST API for the Linces'CKF E-Commerce Platform",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "build": "nest build",
     "start": "node dist/main.js",
