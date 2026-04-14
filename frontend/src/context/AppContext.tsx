@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import api from '../utils/api';
+import { AppContext } from './AppContextObject';
 
 interface User {
   id?: string;
@@ -8,17 +9,6 @@ interface User {
   email?: string;
   role: string;
 }
-
-interface AppContextType {
-  isSpanish: boolean;
-  setIsSpanish: (val: boolean) => void;
-  user: User | null;
-  token: string | null;
-  login: (token: string, user: User) => void;
-  logout: () => Promise<void>;
-}
-
-const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [isSpanish, setIsSpanish] = useState(false);
@@ -41,7 +31,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       }
 
       setToken(savedToken);
-      setUser(parsedUser);
+      setUser(parsedUser as User);
     } catch (error) {
       console.error('Failed to restore auth state:', error);
       localStorage.removeItem('token');
@@ -89,14 +79,4 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </AppContext.Provider>
   );
-};
-
-export const useApp = () => {
-  const context = useContext(AppContext);
-
-  if (!context) {
-    throw new Error('useApp must be used within AppProvider');
-  }
-
-  return context;
 };

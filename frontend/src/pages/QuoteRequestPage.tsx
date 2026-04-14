@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { useApp } from '../context/AppContext';
+import { useApp } from '../context/useApp';
 import { createQuote } from '../services/quoteService';
 
 const QuoteRequestPage = () => {

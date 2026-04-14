@@ -48,7 +48,7 @@
 
 
 import { useEffect, useState } from 'react';
-import { useApp } from '../context/AppContext';
+import { useApp } from '../context/useApp';
 import toast from 'react-hot-toast';
 import {
   getInventoryView,
@@ -209,7 +209,7 @@ const B2BDashboard = () => {
       setShowAddModal(false);
       resetNewProduct();
       fetchInventory();
-    } catch (error) {
+    } catch{
       toast.error(active.createFail);
     }
   };
@@ -236,7 +236,7 @@ const B2BDashboard = () => {
       toast.success(active.updateSuccess);
       setEditingProduct(null);
       fetchInventory();
-    } catch (error) {
+    } catch{
       toast.error(active.updateFail);
     }
   };
@@ -264,7 +264,7 @@ const B2BDashboard = () => {
       await updateInventory(id, { stockQuantity });
       toast.success(active.inventoryUpdateSuccess);
       fetchInventory();
-    } catch (error) {
+    } catch{
       toast.error(active.inventoryUpdateFail);
     }
   };

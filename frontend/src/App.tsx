@@ -2,7 +2,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'react-hot-toast'
 import { useEffect, useState } from 'react'
 
-import { useApp } from './context/AppContext'
+import { useApp } from './context/useApp'
 import { getProducts, type Product } from './services/productService'
 
 import Header from './components/Header'
