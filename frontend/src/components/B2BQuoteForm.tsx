@@ -1,4 +1,5 @@
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 import toast from 'react-hot-toast';
 
 interface B2BQuoteFormProps {
