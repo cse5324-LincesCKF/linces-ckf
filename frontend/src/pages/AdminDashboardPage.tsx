@@ -16,30 +16,30 @@ const AdminDashboardPage = () => {
 
   const content = {
     en: {
-      title: 'Admin Dashboard',
-      back: 'Back',
-      loading: 'Loading dashboard...',
-      loadFail: 'Failed to load dashboard',
-      accessDenied: 'Only administrators can access this page',
-      totalUsers: 'Total Users',
-      totalProducts: 'Total Products',
-      totalOrders: 'Total Orders',
-      openQuotes: 'Open Quotes',
-      manageUsers: 'Manage Users',
-      auditLogs: 'Audit Logs',
+      title: 'Admin Control Center',
+      back: 'Return to Showroom',
+      loading: 'Authorizing access...',
+      loadFail: 'Failed to retrieve administrative data',
+      accessDenied: 'Unauthorized: Administrative privileges required',
+      totalUsers: 'User Base',
+      totalProducts: 'Inventory Items',
+      totalOrders: 'Completed Sales',
+      openQuotes: 'Pending B2B Quotes',
+      manageUsers: 'User Management',
+      auditLogs: 'Security Audit',
     },
     es: {
-      title: 'Panel de Administración',
-      back: 'Volver',
-      loading: 'Cargando panel...',
-      loadFail: 'No se pudo cargar el panel',
-      accessDenied: 'Solo los administradores pueden acceder a esta página',
-      totalUsers: 'Usuarios Totales',
-      totalProducts: 'Productos Totales',
-      totalOrders: 'Pedidos Totales',
-      openQuotes: 'Cotizaciones Abiertas',
-      manageUsers: 'Gestionar Usuarios',
-      auditLogs: 'Registros de Auditoría',
+      title: 'Centro de Control Administrativo',
+      back: 'Volver al Showroom',
+      loading: 'Autorizando acceso...',
+      loadFail: 'No se pudieron recuperar los datos administrativos',
+      accessDenied: 'No autorizado: se requieren privilegios administrativos',
+      totalUsers: 'Base de Usuarios',
+      totalProducts: 'Artículos de Inventario',
+      totalOrders: 'Ventas Completadas',
+      openQuotes: 'Cotizaciones B2B Pendientes',
+      manageUsers: 'Gestión de Usuarios',
+      auditLogs: 'Auditoría de Seguridad',
     },
   };
 
@@ -47,6 +47,7 @@ const AdminDashboardPage = () => {
 
   useEffect(() => {
     const fetchDashboard = async () => {
+      // Logic gate: If no user or not an admin, kick them out
       if (!user) {
         navigate('/');
         return;
@@ -63,7 +64,7 @@ const AdminDashboardPage = () => {
         const data = await getAdminDashboard();
         setSummary(data);
       } catch (error) {
-        console.error('Failed to load dashboard:', error);
+        console.error('Admin Fetch Error:', error);
         toast.error(active.loadFail);
       } finally {
         setLoading(false);
@@ -71,11 +72,11 @@ const AdminDashboardPage = () => {
     };
 
     fetchDashboard();
-  }, [user, navigate]);
+  }, [user, navigate, active.accessDenied, active.loadFail]);
 
   if (loading) {
     return (
-      <div style={{ paddingTop: '120px', paddingLeft: '2rem', paddingRight: '2rem' }}>
+      <div style={{ paddingTop: '120px', textAlign: 'center' }}>
         <div className="loader">{active.loading}</div>
       </div>
     );
@@ -83,8 +84,11 @@ const AdminDashboardPage = () => {
 
   if (!summary) {
     return (
-      <div style={{ paddingTop: '120px', paddingLeft: '2rem', paddingRight: '2rem' }}>
-        <div className="loader">{active.loadFail}</div>
+      <div style={{ paddingTop: '120px', textAlign: 'center' }}>
+        <p className="error-text">{active.loadFail}</p>
+        <button className="btn-dark" onClick={() => navigate('/')}>
+          {active.back}
+        </button>
       </div>
     );
   }
@@ -97,6 +101,8 @@ const AdminDashboardPage = () => {
         paddingLeft: '2rem',
         paddingRight: '2rem',
         paddingBottom: '2rem',
+        maxWidth: '1400px',
+        margin: '0 auto'
       }}
     >
       <div
@@ -105,21 +111,26 @@ const AdminDashboardPage = () => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '2rem',
+          marginBottom: '3rem',
           gap: '1rem',
           flexWrap: 'wrap',
         }}
       >
-        <h2 className="text-reveal" style={{ margin: 0 }}>
-          {active.title}
-        </h2>
+        <div>
+          <h2 className="text-reveal" style={{ margin: 0, fontSize: '2.5rem' }}>
+            {active.title}
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,0.6)', marginTop: '0.5rem' }}>
+            {isSpanish ? 'Resumen del sistema en tiempo real' : 'Real-time system overview'}
+          </p>
+        </div>
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <button className="btn-dark" onClick={() => navigate('/admin/users')}>
+          <button className="secondary-btn" onClick={() => navigate('/admin/users')}>
             {active.manageUsers}
           </button>
 
-          <button className="btn-dark" onClick={() => navigate('/admin/audit')}>
+          <button className="secondary-btn" onClick={() => navigate('/admin/audit')}>
             {active.auditLogs}
           </button>
 
@@ -132,30 +143,40 @@ const AdminDashboardPage = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          gap: '1rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '2rem',
         }}
       >
-        <div className="glass-panel" style={{ padding: '1.5rem' }}>
-          <h3>{active.totalUsers}</h3>
-          <p style={{ fontSize: '2rem', fontWeight: 700 }}>{summary.totalUsers}</p>
+        <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center' }}>
+          <h3 style={{ color: '#d4af37', marginBottom: '1rem', fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+            {active.totalUsers}
+          </h3>
+          <p style={{ fontSize: '3rem', fontWeight: 700, margin: 0 }}>{summary.totalUsers}</p>
         </div>
 
-        <div className="glass-panel" style={{ padding: '1.5rem' }}>
-          <h3>{active.totalProducts}</h3>
-          <p style={{ fontSize: '2rem', fontWeight: 700 }}>{summary.totalProducts}</p>
+        <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center' }}>
+          <h3 style={{ color: '#d4af37', marginBottom: '1rem', fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+            {active.totalProducts}
+          </h3>
+          <p style={{ fontSize: '3rem', fontWeight: 700, margin: 0 }}>{summary.totalProducts}</p>
         </div>
 
-        <div className="glass-panel" style={{ padding: '1.5rem' }}>
-          <h3>{active.totalOrders}</h3>
-          <p style={{ fontSize: '2rem', fontWeight: 700 }}>{summary.totalOrders}</p>
+        <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center' }}>
+          <h3 style={{ color: '#d4af37', marginBottom: '1rem', fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+            {active.totalOrders}
+          </h3>
+          <p style={{ fontSize: '3rem', fontWeight: 700, margin: 0 }}>{summary.totalOrders}</p>
         </div>
 
-        <div className="glass-panel" style={{ padding: '1.5rem' }}>
-          <h3>{active.openQuotes}</h3>
-          <p style={{ fontSize: '2rem', fontWeight: 700 }}>{summary.openQuotes}</p>
+        <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center' }}>
+          <h3 style={{ color: '#d4af37', marginBottom: '1rem', fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+            {active.openQuotes}
+          </h3>
+          <p style={{ fontSize: '3rem', fontWeight: 700, margin: 0 }}>{summary.openQuotes}</p>
         </div>
       </div>
+      
+      <div className="ambient-glow" style={{ top: '10%', right: '5%', opacity: 0.1 }}></div>
     </div>
   );
 };

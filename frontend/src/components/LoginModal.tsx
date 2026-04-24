@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 
@@ -28,6 +29,7 @@ const LoginModal = ({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
@@ -80,9 +82,20 @@ const LoginModal = ({
       localStorage.setItem('token', accessToken);
       localStorage.setItem('user', JSON.stringify(user));
 
+      // Trigger the context update
       onLoginSuccess(accessToken, user);
       toast.success(active.success);
       onClose();
+
+      // NEW: Redirection Logic based on Role
+      if (user.role === 'ADMINISTRATOR') {
+        navigate('/admin');
+      } else if (user.role === 'BRAND_RETAILER') {
+        navigate('/dashboard');
+      } else {
+        navigate('/');
+      }
+      
     } catch (err) {
       console.error('Login error:', err);
       toast.error(active.error);
