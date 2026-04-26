@@ -18,35 +18,35 @@ const AdminUsersPage = () => {
   const content = {
     en: {
       title: 'User Management',
-      back: 'Back',
-      loading: 'Loading users...',
-      loadFail: 'Failed to load users',
-      accessDenied: 'Only administrators can access this page',
-      deactivate: 'Deactivate',
-      deactivateSuccess: 'User deactivated successfully',
-      deactivateFail: 'Failed to deactivate user',
+      back: 'Back to Admin',
+      loading: 'Fetching user registry...',
+      loadFail: 'Failed to retrieve user data',
+      accessDenied: 'Unauthorized: Admin access only',
+      deactivate: 'Deactivate Account',
+      deactivateSuccess: 'User successfully deactivated',
+      deactivateFail: 'Critical: Failed to deactivate user',
       active: 'Active',
       inactive: 'Inactive',
-      status: 'Status',
-      role: 'Role',
-      email: 'Email',
-      name: 'Name',
+      status: 'Current Status',
+      role: 'Assigned Role',
+      email: 'Email Address',
+      name: 'Full Name',
     },
     es: {
       title: 'Gestión de Usuarios',
-      back: 'Volver',
-      loading: 'Cargando usuarios...',
-      loadFail: 'No se pudieron cargar los usuarios',
-      accessDenied: 'Solo los administradores pueden acceder a esta página',
-      deactivate: 'Desactivar',
+      back: 'Volver al Admin',
+      loading: 'Buscando registro de usuarios...',
+      loadFail: 'No se pudieron recuperar los datos de usuario',
+      accessDenied: 'No autorizado: Solo acceso para administradores',
+      deactivate: 'Desactivar Cuenta',
       deactivateSuccess: 'Usuario desactivado con éxito',
-      deactivateFail: 'No se pudo desactivar el usuario',
+      deactivateFail: 'Crítico: No se pudo desactivar el usuario',
       active: 'Activo',
       inactive: 'Inactivo',
-      status: 'Estado',
-      role: 'Rol',
-      email: 'Correo',
-      name: 'Nombre',
+      status: 'Estado Actual',
+      role: 'Rol Asignado',
+      email: 'Correo Electrónico',
+      name: 'Nombre Completo',
     },
   };
 
@@ -70,7 +70,7 @@ const AdminUsersPage = () => {
         const data = await getAdminUsers();
         setUsers(data);
       } catch (error) {
-        console.error('Failed to load users:', error);
+        console.error('User Fetch Error:', error);
         toast.error(activeText.loadFail);
       } finally {
         setLoading(false);
@@ -78,9 +78,12 @@ const AdminUsersPage = () => {
     };
 
     fetchUsers();
-  }, [user, navigate]);
+  }, [user, navigate, activeText.accessDenied, activeText.loadFail]);
 
   const handleDeactivate = async (id: string) => {
+    // Basic confirmation before taking destructive action
+    if (!window.confirm(isSpanish ? '¿Confirmar desactivación?' : 'Confirm deactivation?')) return;
+
     try {
       await deactivateAdminUser(id);
       setUsers((prev) =>
@@ -90,14 +93,14 @@ const AdminUsersPage = () => {
       );
       toast.success(activeText.deactivateSuccess);
     } catch (error) {
-      console.error('Failed to deactivate user:', error);
+      console.error('Deactivation Error:', error);
       toast.error(activeText.deactivateFail);
     }
   };
 
   if (loading) {
     return (
-      <div style={{ paddingTop: '120px', paddingLeft: '2rem', paddingRight: '2rem' }}>
+      <div style={{ paddingTop: '120px', textAlign: 'center' }}>
         <div className="loader">{activeText.loading}</div>
       </div>
     );
@@ -111,6 +114,8 @@ const AdminUsersPage = () => {
         paddingLeft: '2rem',
         paddingRight: '2rem',
         paddingBottom: '2rem',
+        maxWidth: '1200px',
+        margin: '0 auto',
       }}
     >
       <div
@@ -119,10 +124,12 @@ const AdminUsersPage = () => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '2rem',
+          marginBottom: '3rem',
+          flexWrap: 'wrap',
+          gap: '1rem',
         }}
       >
-        <h2 className="text-reveal" style={{ margin: 0 }}>
+        <h2 className="text-reveal" style={{ margin: 0, fontSize: '2rem' }}>
           {activeText.title}
         </h2>
 
@@ -131,26 +138,46 @@ const AdminUsersPage = () => {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gap: '1rem' }}>
+      <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))' }}>
         {users.map((item) => (
-          <div key={item.id} className="glass-panel" style={{ padding: '1.5rem' }}>
-            <p><strong>{activeText.name}:</strong> {item.name || '-'}</p>
-            <p><strong>{activeText.email}:</strong> {item.email}</p>
-            <p><strong>{activeText.role}:</strong> {item.role}</p>
-            <p>
-              <strong>{activeText.status}:</strong>{' '}
-              {item.isActive ? activeText.active : activeText.inactive}
-            </p>
-
-            {item.isActive && (
-              <button
-                className="btn-dark"
-                style={{ marginTop: '1rem' }}
-                onClick={() => handleDeactivate(item.id)}
+          <div key={item.id} className="glass-panel" style={{ padding: '2rem', position: 'relative' }}>
+            <div style={{ marginBottom: '1.5rem' }}>
+              <span 
+                className="role-badge" 
+                style={{ 
+                  fontSize: '0.7rem', 
+                  background: 'rgba(212, 175, 55, 0.1)', 
+                  padding: '4px 10px', 
+                  borderRadius: '12px',
+                  border: '1px solid rgba(212, 175, 55, 0.3)',
+                  color: '#d4af37'
+                }}
               >
-                {activeText.deactivate}
-              </button>
-            )}
+                {item.role}
+              </span>
+            </div>
+
+            <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem' }}>{item.name || 'Anonymous User'}</h4>
+            <p style={{ margin: '0 0 1rem 0', opacity: 0.7, fontSize: '0.9rem' }}>{item.email}</p>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
+              <div>
+                <span style={{ fontSize: '0.8rem', opacity: 0.5, display: 'block' }}>{activeText.status}</span>
+                <span style={{ color: item.isActive ? '#4caf50' : '#ff4d4f', fontWeight: 600 }}>
+                  {item.isActive ? activeText.active : activeText.inactive}
+                </span>
+              </div>
+
+              {item.isActive && item.id !== user?.id && (
+                <button
+                  className="secondary-btn"
+                  style={{ padding: '8px 16px', fontSize: '0.8rem' }}
+                  onClick={() => handleDeactivate(item.id)}
+                >
+                  {activeText.deactivate}
+                </button>
+              )}
+            </div>
           </div>
         ))}
       </div>
