@@ -23,8 +23,9 @@ export function buildTypeOrmOptions(): TypeOrmModuleOptions {
     migrations: [join(__dirname, '..', '..', 'migrations', '*.{ts,js}')],
 //     synchronize: false,
 //     logging: !isProduction,
-    synchronize: true,  // 改为 true
-    logging: true,      // 改为 true (不管是不是生产环境都打印日志)
+    synchronize: true,
+    logging: true,
     migrationsRun: false,
+    ssl: isProduction ? { rejectUnauthorized: false } : false,
   };
 }
